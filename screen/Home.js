@@ -1,29 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, Image } from 'react-native';
 import axios from 'axios'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { berita } from '../store/action'
 
-export default class App extends React.Component {
+ class Home extends React.Component {
   static navigationOptions = {
     title: 'NEWS',
     headerStyle: {
       backgroundColor: '#00BFFF'
     }
 }
-constructor() {
-  super()
-  this.state = {
-    Berita:[]
-  }
-}
 
 componentDidMount() {
-  axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=14a294ac0b1a487486c876ac93c4bd9c').then(res => this.setState({Berita: res.data.articles})).catch(err => console.log(err))
+  axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=14a294ac0b1a487486c876ac93c4bd9c')
+  .then(res => { this.props.berita(res.data.articles)})
+    // this.setState({Berita: res.data.articles}))
+  .catch(err => console.log(err))
 }
   render() {
+    console.log(this.props)
     return (
       <View style={styles.container}>
         <FlatList
-          data={this.state.Berita}
+          data={this.props.redux.berita}
           renderItem={({item})=> {
             return (         
               <View style={{
@@ -91,3 +92,14 @@ const styles = StyleSheet.create({
     color: 'blue'
   }
 });
+
+
+const mapStateToProps = (state) => {
+  return {
+    redux: state
+  }
+}
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({berita}, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

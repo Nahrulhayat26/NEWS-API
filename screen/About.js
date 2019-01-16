@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, Image } from 'react-native';
-import axios from 'axios'
+import { connect } from 'react-redux'
 
-export default class About extends React.Component {
+class About extends React.Component {
   static navigationOptions = {
     title: 'NEWS',
     headerStyle: {
@@ -65,3 +65,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap"
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    redux: state
+  }
+}
+
+export default connect(mapStateToProps)(About)
